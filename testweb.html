@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tracker - Preview Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="mb-10 text-center md:text-left flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Financial Tracker</h1>
+                <p class="text-slate-500">Kelola pemasukan dan pengeluaran Anda secara efisien.</p>
+            </div>
+            <div class="mt-4 md:mt-0 bg-yellow-100 border border-yellow-200 text-yellow-800 px-4 py-2 rounded-lg text-sm font-medium">
+                ⚠️ Mode Preview (Simulasi Tanpa Backend)
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-emerald-100 rounded-xl">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Pemasukan</p>
+                        <h2 id="total-income" class="text-2xl font-bold text-slate-900">Rp 0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-rose-100 rounded-xl">
+                        <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Pengeluaran</p>
+                        <h2 id="total-expense" class="text-2xl font-bold text-slate-900">Rp 0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-blue-100 rounded-xl">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Sisa Saldo</p>
+                        <h2 id="balance" class="text-2xl font-bold text-slate-900">Rp 0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Card -->
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 sticky top-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">Tambah Transaksi</h3>
+                    <form id="tx-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi</label>
+                            <input type="text" id="desc" placeholder="Misal: Gaji Bulanan" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah (Rp)</label>
+                            <input type="number" id="amount" placeholder="0" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Tipe</label>
+                            <select id="type" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                                <option value="income">Pemasukan</option>
+                                <option value="expense">Pengeluaran</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal</label>
+                            <input type="date" id="date" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required>
+                        </div>
+                        <button type="submit" class="w-full bg-slate-900 text-white font-bold py-3 rounded-lg hover:bg-slate-800 transform transition-active active:scale-95 shadow-lg shadow-slate-200">
+                            Simpan Transaksi
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List Card -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-900">Riwayat Transaksi</h3>
+                        <span id="tx-count" class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded-full">0 Transaksi</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4 font-semibold">Tanggal</th>
+                                    <th class="px-6 py-4 font-semibold">Deskripsi</th>
+                                    <th class="px-6 py-4 font-semibold text-right">Jumlah</th>
+                                    <th class="px-6 py-4 font-semibold text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tx-list" class="divide-y divide-slate-100">
+                                <!-- Data rows injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="py-20 text-center hidden">
+                        <div class="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </div>
+                        <p class="text-slate-500">Belum ada transaksi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="toast" class="fixed bottom-8 right-8 bg-slate-900 text-white px-6 py-3 rounded-xl shadow-2xl transform translate-y-24 transition-transform duration-300 flex items-center gap-3">
+        <span id="toast-msg"></span>
+    </div>
+
+    <script>
+        // Simulasi Database di Memori
+        let transactions = [
+            { id: 1, description: 'Saldo Awal', amount: 5000000, type: 'income', date: '2023-11-01' },
+            { id: 2, description: 'Bayar Listrik', amount: 250000, type: 'expense', date: '2023-11-02' }
+        ];
+
+        const renderUI = () => {
+            const list = document.getElementById('tx-list');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('tx-count');
+            
+            let income = 0;
+            let expense = 0;
+
+            if (transactions.length === 0) {
+                list.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                countLabel.innerText = "0 Transaksi";
+            } else {
+                emptyState.classList.add('hidden');
+                countLabel.innerText = `${transactions.length} Transaksi`;
+                
+                // Sort by date desc
+                const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                list.innerHTML = sorted.map(t => {
+                    const isIncome = t.type === 'income';
+                    if (isIncome) income += t.amount; else expense += t.amount;
+
+                    return `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 text-sm text-slate-500">${t.date}</td>
+                            <td class="px-6 py-4 text-sm font-semibold text-slate-900">${t.description}</td>
+                            <td class="px-6 py-4 text-sm font-bold text-right ${isIncome ? 'text-emerald-600' : 'text-rose-600'}">
+                                ${isIncome ? '+' : '-'} Rp ${t.amount.toLocaleString('id-ID')}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="deleteTx(${t.id})" class="p-2 text-slate-400 hover:text-rose-600 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('total-income').innerText = `Rp ${income.toLocaleString('id-ID')}`;
+            document.getElementById('total-expense').innerText = `Rp ${expense.toLocaleString('id-ID')}`;
+            document.getElementById('balance').innerText = `Rp ${(income - expense).toLocaleString('id-ID')}`;
+        };
+
+        const showToast = (msg) => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-24');
+            setTimeout(() => toast.classList.add('translate-y-24'), 3000);
+        };
+
+        // Event Listeners
+        document.getElementById('tx-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newTx = {
+                id: Date.now(),
+                description: document.getElementById('desc').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                type: document.getElementById('type').value,
+                date: document.getElementById('date').value
+            };
+
+            transactions.push(newTx);
+            renderUI();
+            e.target.reset();
+            showToast("Transaksi berhasil ditambahkan!");
+        });
+
+        const deleteTx = (id) => {
+            transactions = transactions.filter(t => t.id !== id);
+            renderUI();
+            showToast("Transaksi telah dihapus.");
+        };
+
+        // Initial Load
+        window.onload = () => {
+            renderUI();
+            // Set today's date as default
+            document.getElementById('date').valueAsDate = new Date();
+        };
+    </script>
+</body>
+</html>
